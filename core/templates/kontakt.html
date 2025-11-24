@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Kontakt – PolePosition Automation{% endblock %}
+{% block description %}
+Nehmen Sie Kontakt mit unserem Team in Hannover auf. Wir helfen Ihnen bei der digitalen Prozessautomatisierung.
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <h1 class="mb-4">Kontakt</h1>
+    <p class="lead">Hier finden Sie unsere Kontaktdaten und können mit uns in Verbindung treten.</p>
+
+    <div class="row mt-4">
+      <!-- CONTACT INFO -->
+      <div class="col-md-6 mb-4">
+        <h4>Hauptsitz Hannover</h4>
+        <ul class="list-unstyled">
+          <li><strong>E-Mail:</strong> 
+            <a href="mailto:Hannover@PolePositionSolutions.de">
+              Hannover@PolePositionSolutions.de
+            </a>
+          </li>
+          <li><strong>Telefon:</strong> 
+            <a href="tel:+495111322030">
+              +49 (0)511 132203-0
+            </a>
+          </li>
+          <li><strong>Adresse:</strong><br>
+              Leonhardtstraße 8<br>
+              30175 Hannover
+          </li>
+        </ul>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div class="col-md-6">
+        <h4>Kontaktformular</h4>
+
+        {% if success %}
+          <div class="alert alert-success">
+            Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns zeitnah bei Ihnen.
+          </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          
+          {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <div class="text-danger small">{{ field.errors }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-primary">Nachricht senden</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

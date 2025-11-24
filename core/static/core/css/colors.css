@@ -1,0 +1,60 @@
+/* Main Colors for the PolePosition Automation */
+:root {
+    --primary-color: #1E90FF; /* Persian Blue */
+    --secondary-color: #00ffff; /* Cyan */
+    --pastel-green: #99ff99; /* Pastel Green */
+    --light-peach: #fff7d7; /* Light Peach */
+    --pale-sky-blue: #dce9f4; /* Pale Sky Blue */
+    --vivid-orange: #f26622; /* Vivid Orange */
+    --vibrant-red: #ed1b35; /* Vibrant Red */
+    --bright-pink: #ee4c9b; /* Bright Pink */
+    --bright-cyan: #4cc5d7; /* Bright Cyan */
+}
+
+.cta-button {
+    background-color: var(--vivid-orange);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cta-button:hover {
+    background-color: var(--vibrant-red);
+}
+
+.navbar-nav .nav-link {
+    color: #222;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color);
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.logo-img {
+  height: 90px;
+  width: auto;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
