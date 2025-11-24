@@ -58,3 +58,26 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+/* Breadcrumb link colors */
+.breadcrumb .breadcrumb-item a {
+  color: #000 !important;
+  text-decoration: none;
+}
+
+.breadcrumb .breadcrumb-item a:hover {
+  text-decoration: underline;
+  color: #000 !important;
+}
+
+/* Optional: Make the slash separator darker too */
+.breadcrumb-item + .breadcrumb-item::before {
+  color: #444 !important;
+}
+
+
+

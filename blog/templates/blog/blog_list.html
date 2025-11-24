@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 
 {% block title %}{{ custom_title|default:"Unser Blog – PolePosition Automation" }}{% endblock %}
 {% block description %}{{ custom_description|default:"Lesen Sie unsere neuesten Beiträge zur Prozessautomatisierung, Digitalisierung und Technologie in verschiedenen Branchen." }}{% endblock %}
@@ -18,6 +19,11 @@
             <button type="submit" class="btn btn-primary w-100">Suchen</button>
           </div>
         </form>
+        {% if search_message %}
+          <div class="mt-2 alert alert-info">
+            {{ search_message }}
+          </div>
+        {% endif %}
       </div>
 
       <!-- 🧭 Sidebar for desktop -->
@@ -52,10 +58,6 @@
       <!-- 📄 Blog posts -->
       <div class="col-md-9">
         <h1 class="mb-4">Unser Blog</h1>
-
-        {% if search_message %}
-          <p class="alert alert-info">{{ search_message }}</p>
-        {% endif %}
 
         {% if page_obj.object_list %}
           <div class="row">
@@ -111,9 +113,38 @@
             <strong>Demnächst verfügbar:</strong> Unsere ersten Artikel erscheinen in Kürze.
           </div>
         {% endif %}
+
+        <!-- 💌 Newsletter Signup -->
+        <hr class="my-5">
+        <div class="newsletter-signup">
+          <h3>Abonnieren Sie unseren Newsletter</h3>
+          <p>Erhalten Sie neue Blogbeiträge und Tipps direkt in Ihr Postfach.</p>
+
+          {% if success %}
+            <div class="alert alert-success" role="alert">
+              🎉 Erfolgreich angemeldet! Danke für Ihr Interesse.
+            </div>
+          {% endif %}
+
+          <form method="post" class="row gy-2">
+            {% csrf_token %}
+            <div class="col-md-8">
+              {{ form.email|add_class:"form-control" }}
+              {% if form.email.errors %}
+                <div class="text-danger small">{{ form.email.errors.0 }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-4">
+              <button type="submit" class="btn btn-success w-100">Anmelden</button>
+            </div>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
 {% endblock %}
+
+
 

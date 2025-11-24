@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'contact',
     'team',
     'testimonials',
-    'django.contrib.sitemaps', # make sure it is here included
+    'django.contrib.sitemaps',
+    "widget_tweaks", # make sure it is here included
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactMessage
+from .models import ContactMessage, NewsletterSubscriber
 
 # Register your models here.
 admin.site.site_header = "PolePosition Automation"
@@ -12,3 +12,5 @@ class ContactMessageAdmin(admin.ModelAdmin):
     search_fields = ("name", "email", "message")
     list_filter = ("created_at",)
     ordering = ("-created_at",)
+
+admin.site.register(NewsletterSubscriber)

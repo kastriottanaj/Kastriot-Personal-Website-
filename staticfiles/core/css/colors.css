@@ -58,3 +58,16 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+.breadcrumb a {
+  color: #000 !important; /* black color for links */
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  color: #333;  /* Darker separator */
+}

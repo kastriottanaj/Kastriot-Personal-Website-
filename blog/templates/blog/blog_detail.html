@@ -1,83 +1,5 @@
 {% extends "base.html" %}
 
-{% block og_tags %}
-  <meta property="og:title" content="{{ post.meta_title|default:post.title }}">
-  <meta property="og:description" content="{{ post.meta_description|default:post.content|truncatewords:20 }}">
-  {% if post.featured_image %}
-    <meta property="og:image" content="{{ post.featured_image.url }}">
-  {% endif %}
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="{{ request.build_absolute_uri }}">
-{% endblock %}
-
-{% block extra_head %}
-  <!-- Twitter Card Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ post.meta_title|default:post.title }}">
-  <meta name="twitter:description" content="{{ post.meta_description|default:post.content|truncatewords:20 }}">
-  {% if post.featured_image %}
-    <meta name="twitter:image" content="{{ post.featured_image.url }}">
-  {% endif %}
-
-  <!-- JSON-LD Structured Data: BlogPosting -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "{{ post.meta_title|default:post.title|escape }}",
-    "description": "{{ post.meta_description|default:post.content|truncatewords:20|escape }}",
-    {% if post.featured_image %}
-    "image": "{{ post.featured_image.url }}",
-    {% endif %}
-    "datePublished": "{{ post.created_at|date:'c' }}",
-    "author": {
-      "@type": "Organization",
-      "name": "PolePosition Automation"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "PolePosition Automation",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "/static/images/logo.png"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "{{ request.build_absolute_uri }}"
-    }
-  }
-  </script>
-
-  <!-- JSON-LD Structured Data: BreadcrumbList -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "{{ request.scheme }}://{{ request.get_host }}/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Blog",
-        "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'blog' %}"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "{{ post.title|escape }}",
-        "item": "{{ request.build_absolute_uri }}"
-      }
-    ]
-  }
-  </script>
-{% endblock %}
-
 {% block title %}{{ post.meta_title|default:post.title }} – PolePosition Automation{% endblock %}
 {% block description %}{{ post.meta_description|default:post.description|default:post.content|truncatewords:20 }}{% endblock %}
 
@@ -85,7 +7,7 @@
 <section class="py-5">
   <div class="container">
 
-    <!-- Breadcrumbs (visual) -->
+    <!-- Breadcrumbs -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -94,14 +16,14 @@
       </ol>
     </nav>
 
-    <!-- Blog Content -->
+    <!-- Blog Post -->
     {% if post.featured_image %}
       <picture>
         <source srcset="{{ post.webp_image_url }}" type="image/webp">
         <img src="{{ post.featured_image.url }}"
+             alt="{{ post.title }}"
              width="{{ post.image_width }}"
              height="{{ post.image_height }}"
-             alt="{{ post.title }}"
              class="img-fluid mb-3"
              loading="lazy">
       </picture>
@@ -109,7 +31,7 @@
 
     {% if post.category %}
       <p class="text-muted mb-1">
-        Kategorie: <a href="#">{{ post.category.name }}</a>
+        Kategorie: <a href="{% url 'blog_by_category' category_slug=post.category.slug %}">{{ post.category.name }}</a>
       </p>
     {% endif %}
 
@@ -119,9 +41,43 @@
     <div>
       {{ post.content|linebreaks }}
     </div>
+
+    <!-- Related Posts -->
+    {% if related_posts %}
+      <hr class="my-5">
+      <h3>Weitere Beiträge</h3>
+      <div class="row">
+        {% for related in related_posts %}
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+            {% if related.featured_image %}
+            <div class="ratio ratio-4x3 mb-2" style="overflow: hidden;">
+              <picture>
+                <source srcset="{{ related.webp_image_url }}" type="image/webp">
+                <img src="{{ related.featured_image.url }}"
+                alt="{{ related.title }}"
+                class="w-100 h-100 object-fit-cover"
+                loading="lazy">
+              </picture>
+            </div>
+            {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="{% url 'blog_detail' slug=related.slug %}">{{ related.title }}</a>
+                </h5>
+                <p class="text-muted">{{ related.created_at|date:"d. F Y" }}</p>
+                <a href="{% url 'blog_detail' slug=related.slug %}" class="btn btn-outline-primary btn-sm mt-2">
+                  Weiterlesen
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
   </div>
 </section>
 {% endblock %}
-
 
 
