@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Unser Blog – PolePosition Automation{% endblock %}
-{% block description %}Lesen Sie unsere neuesten Beiträge zur Prozessautomatisierung, Digitalisierung und Technologie in verschiedenen Branchen.{% endblock %}
+{% block title %}{{ custom_title|default:"Unser Blog – PolePosition Automation" }}{% endblock %}
+{% block description %}{{ custom_description|default:"Lesen Sie unsere neuesten Beiträge zur Prozessautomatisierung, Digitalisierung und Technologie in verschiedenen Branchen." }}{% endblock %}
 
 {% block content %}
 <section class="py-5">
   <div class="container">
     <div class="row">
 
-      <!-- 🔍 SEARCH BAR (visible everywhere) -->
+      <!-- 🔍 SEARCH BAR -->
       <div class="col-12 mb-4">
         <form method="get" action="{% url 'blog' %}" class="row gx-2">
           <div class="col-md-4 col-8">
@@ -29,7 +29,7 @@
           </li>
           {% for category in categories %}
             <li class="list-group-item {% if current_category == category.slug %}active{% endif %}">
-              <a href="{% url 'blog_by_category' category.slug %}">{{ category.name }}</a>
+              <a href="{% url 'blog_by_category' category_slug=category.slug %}">{{ category.name }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -52,6 +52,10 @@
       <!-- 📄 Blog posts -->
       <div class="col-md-9">
         <h1 class="mb-4">Unser Blog</h1>
+
+        {% if search_message %}
+          <p class="alert alert-info">{{ search_message }}</p>
+        {% endif %}
 
         {% if page_obj.object_list %}
           <div class="row">
@@ -112,3 +116,4 @@
   </div>
 </section>
 {% endblock %}
+
