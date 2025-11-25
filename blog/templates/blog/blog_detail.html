@@ -3,6 +3,24 @@
 {% block title %}{{ post.title }} – PolePosition Automation{% endblock %}
 {% block description %}{{ post.meta_description|default:post.content|truncatewords:25 }}{% endblock %}
 
+{% block meta %}
+  <meta name="author" content="{{ post.author.get_full_name }}">
+  <meta property="og:title" content="{{ post.title }}">
+  <meta property="og:description" content="{{ post.meta_description|default:post.content|truncatewords:25 }}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  {% if post.featured_image %}
+    <meta property="og:image" content="{{ post.featured_image.url }}">
+  {% endif %}
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ post.title }}">
+  <meta name="twitter:description" content="{{ post.meta_description|default:post.content|truncatewords:25 }}">
+  {% if post.featured_image %}
+    <meta name="twitter:image" content="{{ post.featured_image.url }}">
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="py-5">
   <div class="container">
@@ -20,11 +38,11 @@
         <!-- 📄 Blog Content -->
         <article>
           <h1>{{ post.title }}</h1>
-          <p class="text-muted">Veröffentlicht am {{ post.created_at|date:"d. F Y" }}</p>
+          <p class="text-muted">Veröffentlicht am {{ post.created_at|date:"d. F Y" }} von {{ post.author.get_full_name }}</p>
 
           {% if post.featured_image %}
             <picture>
-              <source srcset="{{ post.webp_image_url }}" type="image/webp"> 
+              <source srcset="{{ post.webp_image_url }}" type="image/webp">
               <img src="{{ post.featured_image.url }}"
                    width="{{ post.image_width }}"
                    height="{{ post.image_height }}"

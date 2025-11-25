@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 from PIL import Image
 
@@ -29,6 +30,7 @@ class BlogPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     meta_title = models.CharField(max_length=70, help_text="Meta title for SEO", blank=True)
     meta_description = models.TextField(max_length=160, help_text="Meta description for SEO", blank=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     tags = TaggableManager(blank=True)
 
     def blog_list(request, tag_slug=None):

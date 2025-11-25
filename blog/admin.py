@@ -10,10 +10,8 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_filter = ("published", "created_at")
     ordering = ("-created_at",)
     prepopulated_fields = {"slug": ("title",)}
-    fields = (
-        "title", "slug", "meta_title", "meta_description",
-        "content", "category", "featured_image", "tags", "published"
-    )
+    fields = ("title", "slug", "meta_title", "meta_description", "content", "category", "featured_image", "author", "published", "tags")
+
 
 
 @admin.register(Category)
