@@ -1,81 +1,80 @@
 {% extends "base.html" %}
 
-{% block title %}{{ post.meta_title|default:post.title }} – PolePosition Automation{% endblock %}
-{% block description %}{{ post.meta_description|default:post.description|default:post.content|truncatewords:20 }}{% endblock %}
+{% block title %}{{ post.title }} – PolePosition Automation{% endblock %}
+{% block description %}{{ post.meta_description|default:post.content|truncatewords:25 }}{% endblock %}
 
 {% block content %}
 <section class="py-5">
   <div class="container">
+    <div class="row">
 
-    <!-- Breadcrumbs -->
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'blog' %}">Blog</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
-      </ol>
-    </nav>
+      <div class="col-md-9">
+        <!-- 🧭 Breadcrumb -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'blog' %}">Blog</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ post.title }}</li>
+          </ol>
+        </nav>
 
-    <!-- Blog Post -->
-    {% if post.featured_image %}
-      <picture>
-        <source srcset="{{ post.webp_image_url }}" type="image/webp">
-        <img src="{{ post.featured_image.url }}"
-             alt="{{ post.title }}"
-             width="{{ post.image_width }}"
-             height="{{ post.image_height }}"
-             class="img-fluid mb-3"
-             loading="lazy">
-      </picture>
-    {% endif %}
+        <!-- 📄 Blog Content -->
+        <article>
+          <h1>{{ post.title }}</h1>
+          <p class="text-muted">Veröffentlicht am {{ post.created_at|date:"d. F Y" }}</p>
 
-    {% if post.category %}
-      <p class="text-muted mb-1">
-        Kategorie: <a href="{% url 'blog_by_category' category_slug=post.category.slug %}">{{ post.category.name }}</a>
-      </p>
-    {% endif %}
+          {% if post.featured_image %}
+            <picture>
+              <source srcset="{{ post.webp_image_url }}" type="image/webp"> 
+              <img src="{{ post.featured_image.url }}"
+                   width="{{ post.image_width }}"
+                   height="{{ post.image_height }}"
+                   alt="{{ post.title }}"
+                   class="img-fluid mb-4"
+                   loading="lazy">
+            </picture>
+          {% endif %}
 
-    <h1>{{ post.title }}</h1>
-    <p class="text-muted">Veröffentlicht am {{ post.created_at|date:"d. F Y" }}</p>
-    <hr>
-    <div>
-      {{ post.content|linebreaks }}
-    </div>
-
-    <!-- Related Posts -->
-    {% if related_posts %}
-      <hr class="my-5">
-      <h3>Weitere Beiträge</h3>
-      <div class="row">
-        {% for related in related_posts %}
-          <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-            {% if related.featured_image %}
-            <div class="ratio ratio-4x3 mb-2" style="overflow: hidden;">
-              <picture>
-                <source srcset="{{ related.webp_image_url }}" type="image/webp">
-                <img src="{{ related.featured_image.url }}"
-                alt="{{ related.title }}"
-                class="w-100 h-100 object-fit-cover"
-                loading="lazy">
-              </picture>
-            </div>
-            {% endif %}
-              <div class="card-body">
-                <h5 class="card-title">
-                  <a href="{% url 'blog_detail' slug=related.slug %}">{{ related.title }}</a>
-                </h5>
-                <p class="text-muted">{{ related.created_at|date:"d. F Y" }}</p>
-                <a href="{% url 'blog_detail' slug=related.slug %}" class="btn btn-outline-primary btn-sm mt-2">
-                  Weiterlesen
-                </a>
-              </div>
-            </div>
+          <div class="content">
+            {{ post.content|safe }}
           </div>
-        {% endfor %}
-      </div>
-    {% endif %}
 
+          <!-- 🏷️ Tags -->
+          {% if post.tags.all %}
+            <div class="mt-4">
+              <h5>Tags:</h5>
+              <ul class="list-inline">
+                {% for tag in post.tags.all %}
+                  <li class="list-inline-item">
+                    <a href="{% url 'blog_by_tag' tag.slug %}" class="badge bg-secondary text-decoration-none">{{ tag.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </article>
+
+        <!-- 📚 Related Posts -->
+        {% if related_posts %}
+          <hr class="my-5">
+          <h3>Verwandte Beiträge</h3>
+          <div class="row">
+            {% for related in related_posts %}
+              <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    {% if related.featured_image %}
+                      <img src="{{ related.featured_image.url }}" alt="{{ related.title }}" class="img-fluid mb-3" loading="lazy">
+                    {% endif %}
+                    <h5><a href="{% url 'blog_detail' slug=related.slug %}">{{ related.title }}</a></h5>
+                    <a href="{% url 'blog_detail' slug=related.slug %}" class="btn btn-outline-primary btn-sm">Weiterlesen</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </section>
 {% endblock %}

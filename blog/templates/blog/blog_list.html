@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
 
 {% block title %}{{ custom_title|default:"Unser Blog – PolePosition Automation" }}{% endblock %}
 {% block description %}{{ custom_description|default:"Lesen Sie unsere neuesten Beiträge zur Prozessautomatisierung, Digitalisierung und Technologie in verschiedenen Branchen." }}{% endblock %}
@@ -9,7 +8,7 @@
   <div class="container">
     <div class="row">
 
-      <!-- 🔍 SEARCH BAR -->
+      <!-- 🔍 Search -->
       <div class="col-12 mb-4">
         <form method="get" action="{% url 'blog' %}" class="row gx-2">
           <div class="col-md-4 col-8">
@@ -26,7 +25,7 @@
         {% endif %}
       </div>
 
-      <!-- 🧭 Sidebar for desktop -->
+      <!-- 🧭 Sidebar -->
       <aside class="col-md-3 d-none d-md-block">
         <h5>Kategorien</h5>
         <ul class="list-group">
@@ -41,7 +40,7 @@
         </ul>
       </aside>
 
-      <!-- 🔽 Dropdown for mobile -->
+      <!-- 🔽 Mobile Dropdown -->
       <div class="col-12 d-md-none mb-3">
         <form method="get" onchange="this.submit()">
           <select name="category" class="form-select">
@@ -55,7 +54,7 @@
         </form>
       </div>
 
-      <!-- 📄 Blog posts -->
+      <!-- 📄 Blog Posts -->
       <div class="col-md-9">
         <h1 class="mb-4">Unser Blog</h1>
 
@@ -80,6 +79,16 @@
                       <a href="{% url 'blog_detail' slug=post.slug %}">{{ post.title }}</a>
                     </h4>
                     <p class="text-muted">Veröffentlicht am {{ post.created_at|date:"d. F Y" }}</p>
+
+                    <!-- 🏷️ Tags -->
+                    {% if post.tags.all %}
+                      <div class="mb-2">
+                        {% for tag in post.tags.all %}
+                          <a href="{% url 'blog_by_tag' tag.slug %}" class="badge bg-light text-dark border me-1">{{ tag.name }}</a>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+
                     <p>{{ post.content|truncatewords:30 }}</p>
                     <a href="{% url 'blog_detail' slug=post.slug %}" class="btn btn-primary btn-sm">Weiterlesen</a>
                   </div>
@@ -113,38 +122,9 @@
             <strong>Demnächst verfügbar:</strong> Unsere ersten Artikel erscheinen in Kürze.
           </div>
         {% endif %}
-
-        <!-- 💌 Newsletter Signup -->
-        <hr class="my-5">
-        <div class="newsletter-signup">
-          <h3>Abonnieren Sie unseren Newsletter</h3>
-          <p>Erhalten Sie neue Blogbeiträge und Tipps direkt in Ihr Postfach.</p>
-
-          {% if success %}
-            <div class="alert alert-success" role="alert">
-              🎉 Erfolgreich angemeldet! Danke für Ihr Interesse.
-            </div>
-          {% endif %}
-
-          <form method="post" class="row gy-2">
-            {% csrf_token %}
-            <div class="col-md-8">
-              {{ form.email|add_class:"form-control" }}
-              {% if form.email.errors %}
-                <div class="text-danger small">{{ form.email.errors.0 }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-4">
-              <button type="submit" class="btn btn-success w-100">Anmelden</button>
-            </div>
-          </form>
-        </div>
-
       </div>
     </div>
   </div>
 </section>
 {% endblock %}
-
-
 

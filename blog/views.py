@@ -5,6 +5,8 @@ from .models import BlogPost, Category
 from .forms import NewsletterSignupForm
 from core.models import NewsletterSubscriber
 from django.core.mail import send_mail
+from taggit.models import Tag
+
 
 
 def blog_list(request):
@@ -95,5 +97,23 @@ def blog_detail(request, slug):
     })
 
 
+def blog_by_tag(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = BlogPost.objects.filter(tags__in=[tag], published=True).order_by("-created_at")
+    
+    title = f"Beiträge mit dem Tag „{tag.name}“ – PolePosition Automation"
+    description = f"Alle Blogbeiträge, die mit dem Tag „{tag.name}“ versehen sind."
 
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
+    return render(request, "blog/blog_list.html", {
+        "page_obj": page_obj,
+        "custom_title": title,
+        "custom_description": description,
+        "query": None,
+        "current_category": None,
+        "categories": Category.objects.all(),
+        "search_message": f"{posts.count()} Beitrag/Beiträge mit dem Tag „{tag.name}“",
+    })
