@@ -4,7 +4,7 @@
 {% block description %}{{ post.meta_description|default:post.content|truncatewords:25 }}{% endblock %}
 
 {% block meta %}
-  <meta name="author" content="{{ post.author.get_full_name }}">
+  <meta name="author" content="{{ post.author.get_full_name|default:post.author.username }}">
   <meta property="og:title" content="{{ post.title }}">
   <meta property="og:description" content="{{ post.meta_description|default:post.content|truncatewords:25 }}">
   <meta property="og:type" content="article">
@@ -38,7 +38,12 @@
         <!-- 📄 Blog Content -->
         <article>
           <h1>{{ post.title }}</h1>
-          <p class="text-muted">Veröffentlicht am {{ post.created_at|date:"d. F Y" }} von {{ post.author.get_full_name }}</p>
+          <p class="text-muted">
+            Veröffentlicht am {{ post.created_at|date:"d. F Y" }}
+            {% if post.author %}
+            von {{ post.author.get_full_name|default:post.author.username }}
+            {% endif %}
+          </p>
 
           {% if post.featured_image %}
             <picture>
